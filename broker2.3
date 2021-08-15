@@ -1,0 +1,107 @@
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.common.exceptions import NoSuchElementException
+import chromedriver_binary
+import urllib
+import time
+##
+from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
+
+print ('start...')
+
+#site = "https://invest.yandex.ru/catalog/fund/fxwo/"
+
+#chrome_options = Options()
+#chrome_options.add_argument("--headless")
+
+#driver = webdriver.Chrome(options=chrome_options)
+#driver = webdriver.Chrome(ChromeDriverManager().install())
+#driver = webdriver.Chrome()
+#driver.get(site)
+
+#one_prise = driver.find_element_by_id("root")
+#print (one_prise)
+#print('нихуя но все же норм')
+import requests
+from bs4 import BeautifulSoup
+
+#def big_broker(price):
+    #price2 = price
+old_price = 0
+def broker(old_price): # 18440
+        #селениум#
+        site = "https://invest.yandex.ru/catalog/fund/fxwo/"
+
+        chrome_options = Options()
+        chrome_options.add_argument("--headless")
+
+        #driver = webdriver.Chrome(ChromeDriverManager().install())
+
+        driver = webdriver.Chrome()
+        driver.get(site)
+        #селениум#
+        url = 'https://invest.yandex.ru/catalog/fund/fxwo/'
+        response = requests.get(url)
+        soup = BeautifulSoup(response.text, 'lxml')
+        quotes = soup.find('div', class_='_2NhGI8HVO_OG2E2pWl10IY')
+        for i in quotes:
+            quotes = i
+            quotes = quotes.replace('₽','')
+            quotes = quotes.replace(' ','') # чистим цифры
+
+            newquotes = ""
+            b = 0
+            for i in quotes:
+                b +=1
+                if b < 7 and i != ',': # убираем запятую
+                    newquotes += i
+                    quotes = newquotes # 2 0000
+            price2 = int(newquotes)
+                    #print(old_price)
+        #print (old_price)
+        if old_price == 0 :
+            i = 1
+        else:
+            reg_path = "/html/body/div[2]/div[1]/header/div/span[2]/a[1]"
+            register = driver.find_element_by_xpath(reg_path).click()
+            yandex_id = "/html/body/div[1]/div/div[2]/div[2]/div/div/div[2]/div[3]/div/div/div/div[1]/form/div[1]/span/input"
+            password = "/html/body/div[1]/div/div[2]/div[2]/div/div/div[2]/div[3]/div/div/div/form/div[2]/span/input"
+            register_id = driver.find_element_by_xpath(yandex_id).send_keys("arty.butcko@yandex.ru")
+            register_button_1 =driver.find_element_by_xpath("/html/body/div[1]/div/div[2]/div[2]/div/div/div[2]/div[3]/div/div/div/div[1]/form/div[3]/button").click()
+#/html/body/div[1]/div/div[2]/div[2]/div/div/div[2]/div[3]/div/div/div/div[1]/form/div[3]/button
+            time.sleep(4)
+            register_password = driver.find_element_by_xpath(password).send_keys("135797531AaA")
+            #/html/body/div/div/div[2]/div[2]/div/div/div[2]/div[3]/div/div/div/form/div[3]/button
+            register_button_2 = driver.find_element_by_xpath("/html/body/div/div/div[2]/div[2]/div/div/div[2]/div[3]/div/div/div/form/div[3]/button").click()
+            print ('Старая цена' + str(old_price))
+            print ('Новая цена' + str(price2))
+            if price2 < old_price:
+                print ('/////////////////покупаю')
+                #sell = driver.ffind_element_by_xpath("Icon Icon_svg Icon_type_star-outline Button2-Icon2").click()
+            if price2 == old_price:
+                print ('/////////////////держу')
+                element_one =driver.find_element_by_css_selector("button.Button2_width_max.Button2_size_m.Button2_view_action")
+                element_one.click()
+            if price2 > old_price:
+                print ('/////////////////продаю')
+                print ('///////////////////////разница:'+ str(price2 - old_price))
+                element_one =driver.find_element_by_css_selector("button.Button2_width_max.Button2_size_m.Button2_view_default")
+                element_one.click()
+        new_price = price2
+        return new_price  #2 0000 # выводим спарсенное число
+i = 1
+while i<2:
+    price = broker(old_price) # вызываем функцию с новым значением
+        #print (new_price)
+        #price = new_price
+        #return price # выводим спарсенное число
+    broker(price)
+#print(quotes)
+#price = 0
+#big = big_broker(price)
+#price = big
+#h = 0
+#while h <100:
+#    big_broker(price) # вызываем главную функцию
+    #h+=1
