@@ -1,0 +1,150 @@
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.common.exceptions import NoSuchElementException
+import chromedriver_binary
+import urllib
+import time
+##
+from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
+
+print ('start...')
+
+#site = "https://invest.yandex.ru/catalog/fund/fxwo/"
+
+#chrome_options = Options()
+#chrome_options.add_argument("--headless")
+
+#driver = webdriver.Chrome(options=chrome_options)
+#driver = webdriver.Chrome(ChromeDriverManager().install())
+#driver = webdriver.Chrome()
+#driver.get(site)
+
+#one_prise = driver.find_element_by_id("root")
+#print (one_prise)
+#print('нихуя но все же норм')
+import requests
+from bs4 import BeautifulSoup
+
+#def big_broker(price):
+    #price2 = price
+prise_list = [0]
+old_price = 0
+def broker( prise_list ): # 18440
+        old_price = 0
+        paper = 5
+        #селениум#
+        site = "https://invest.yandex.ru/catalog/fund/fxwo/"
+
+        chrome_options = Options()
+        chrome_options.add_argument("--headless")
+
+        #driver = webdriver.Chrome(ChromeDriverManager().install())
+
+        driver = webdriver.Chrome()
+        driver.get(site)
+        #селениум#
+        def buy_paper():
+             print ('/////////////////покупаю')
+             element_one =driver.find_element_by_xpath("/html/body/div[2]/div[1]/div/div/div/div/div[1]/div/div/div/div[6]/div[3]/button")
+             element_one.click()
+             time.sleep(5)
+             buy = driver.find_element_by_xpath("/html/body/div[3]/div/div/div/div/div[3]/div[2]/label[1]/label/input").send_keys(5)
+             #enter = driver.find_element_by_xpath("/html/body/div[3]/div/div/div/div/div[3]/div[2]/label[1]/label/input").send_keys(u'\ue007')
+             time.sleep(4)
+             button_1 = driver.find_element_by_xpath("/html/body/div[3]/div/div/div/div/div[2]/div/div").click()
+             time.sleep(3)
+             button_buy = driver.find_element_by_xpath("/html/body/div[3]/div/div/div/div/div[3]/div[5]/button").click()
+             #sell = driver.ffind_element_by_xpath("Icon Icon_svg Icon_type_star-outline Button2-Icon2").click()
+        def sell_paper():
+            print ('/////////////////продаю')
+            print ('///////////////////////разница:'+ str(price2 - old_price))
+            element_one =driver.find_element_by_xpath("/html/body/div[2]/div[1]/div/div/div/div/div[1]/div/div/div/div[6]/div[2]")
+            elemenыыt_one.click()
+            time.sleep(5)
+            sell = driver.find_element_by_xpath("/html/body/div[3]/div/div/div/div/div[3]/div[2]/label[1]/label/input").send_keys(5)
+            #enter = driver.find_element_by_xpath("/html/body/div[3]/div[2]/div/div/div/div[3]/div[2]/label[1]/label/input").send_keys(u'\ue007')
+            time.sleep(4)
+            button_2 = driver.find_element_by_xpath("/html/body/div[3]/div/div/div/div/div[2]/div/div").click()
+            time.sleep(4)
+            button_sell = driver.find_element_by_xpath("/html/body/div[3]/div/div/div/div/div[3]/div[5]/button").click()
+        def register_on_site():
+
+        url = 'https://invest.yandex.ru/catalog/fund/fxwo/'
+        response = requests.get(url)
+        soup = BeautifulSoup(response.text, 'lxml')
+        quotes = soup.find('div', class_='_2NhGI8HVO_OG2E2pWl10IY')
+        for i in quotes:
+            quotes = i
+            quotes = quotes.replace('₽','')
+            quotes = quotes.replace(' ','') # чистим цифры
+
+            newquotes = ""
+            b = 0
+            for i in quotes:
+                b +=1
+                if b < 7 and i != ',': # убираем запятую
+                    newquotes += i
+                    quotes = newquotes # 2 0000
+            price2 = int(newquotes)
+                    #print(old_price)
+        print (old_price)
+        print (prise_list
+        i = 0
+        if int(prise_list[-1])== 0 and (prise_list[-1])== None:
+            i = 1
+        else:
+            register_on_site() # регистрация
+            print ('Старая цена' + str(prise_list[-1]))
+            print ('Новая цена' + str(price2))
+            time.sleep(5)
+            if len(prise_list) < 7:
+                if price2 < prise_list[-1] : # если разница между ценами больше 2 процента то продаем
+                    buy_paper() # покупа
+                    yes_buy = 1
+                    prise_list.insert(0,price2)
+            if price2 == prise_list[-1] :
+                print ('/////////////////держу')
+                #buy_paper(
+            k = 0
+            for i in prise_list
+                k += 1
+                if price2 > i
+                     sell_paper(
+                     del prise_list[k-1]
+                     print ("////////////////////////продаю")
+                         
+    
+
+
+                        
+            if len(prise_list) > 10:
+                print ("Бумаги сильно падают в цене!")
+            # [2000, 2200, 23000
+            del.prise_list[-1]
+            prise_list.append(int(price2)) # [20000, 21000, ...]
+            new_price = price2
+            print (prise_list)
+            print (new_price)
+            #return new_price  #2 0000 # выводим спарсенное число
+            return prise_list # выводим список
+            old_price = new_price
+            return old_price
+
+i = 1
+while i<2:
+    #price = broker(prise_list) # вызываем функцию с новым значением
+        #print (new_price)
+        #price = new_price
+        #return price # выводим спарсенное число
+    broker( prise_list )
+#print(quotes)
+#price = 0
+#big = big_broker(price)
+#price = big
+#h = 0
+#while h <100:
+#    big_broker(price) # вызываем главную функцию
+    #h+=1
+
+    #h+=1
