@@ -1,4 +1,4 @@
-﻿from selenium import webdriver
+from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.wait import WebDriverWait
@@ -52,7 +52,8 @@ def broker( prise_list ): # 18440
         #options = Options()
         #options.add_argument("--headless") # для открытия headless-браузераoptimize
         options = webdriver.ChromeOptions()
-        options.add_argument('headless')  # для открытия hea
+        options.add_argument('‐‐headless')  # для открытия hea
+        options.add_argument("‐‐log level = 3")
         driver = webdriver.Chrome(executable_path=chromedriver, chrome_options=options)
         driver.get(site)
 
@@ -121,7 +122,8 @@ def broker( prise_list ): # 18440
         #session_2 = requests.Session()
         #auth_2 = session_2.post(url_auth_2, data = {'password':'135797531AaA'})
         #print (auth_2)
-        while ind != 1000:
+        x = 1
+        if x == 1:
             driver.get("https://invest.yandex.ru/catalog/fund/fxwo/")
             rehtml = driver.page_source
             #url = 'https://invest.yandex.ru/catalog/fund/fxwo/'
@@ -161,7 +163,7 @@ def broker( prise_list ): # 18440
                     print ('Новая цена' + str(price2))
                     time.sleep(5)
                     if len(prise_list) < 7 and prise_list[0] != 0:
-                        if price2 < prise_list[-1] : # если разница между ценами больше 2 процента то продаем
+                        if price2 > prise_list[-1] : # если разница между ценами больше 2 процента то продаем
                             try:
                                 buy_paper() # покупа
                                 prise_list.insert(0,price2)
@@ -184,7 +186,7 @@ def broker( prise_list ): # 18440
                     k = 0
                     for i in prise_list:
                         k += 1
-                        if price2 > i:
+                        if price2 < i:
                             try:
                                 sell_paper() # покупа
                                 del prise_list[k-1]
@@ -205,12 +207,12 @@ def broker( prise_list ): # 18440
                     if len(prise_list) > 10:
                         print ("Бумаги сильно падают в цене!")
             # [2000, 2200, 23000
-        if len(prise_list) > 0:
-            if prise_list[0] == 0:
-                prise_list[0] = price2
-            else:
+        #if len(prise_list) > 0:
+        if prise_list[0] == 0:
+            prise_list[0] = price2
+        else:
 
-                del prise_list[-1]
+            del prise_list[-1]
             prise_list.append(int(price2)) # [20000, 21000, ...]
         new_price = price2
         print (prise_list)
